@@ -1,52 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parti Panels by f7ash</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Adobe Fonts Link -->
-    <link rel="stylesheet" href="https://use.typekit.net/nls3wsu.css">
-    <!-- html2canvas Script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <h1>Parti Panels by f7ash</h1>
-        <div class="panel-container">
-            <button id="prev-btn" class="nav-btn">
-                <img src="icons/left-arrow.png" alt="Previous">
-            </button>
-            <div class="panel" id="panel">
-                <img id="template-image" src="" alt="Panel Design">
-                <div class="editable-text" contenteditable="true" id="editable-text">Edit Me!</div>
-            </div>
-            <button id="next-btn" class="nav-btn">
-                <img src="icons/right-arrow.png" alt="Next">
-            </button>
-        </div>
-        <p class="instructions">Use right and left arrows to preview different background templates.</p>
-        <div class="controls">
-            <label class="custom-file-upload">
-                <input type="file" id="font-upload" accept=".ttf,.otf" />
-                Upload Custom Font
-            </label>
-            <select id="font-selector"></select>
-            <label>Font Size:</label>
-            <input type="range" id="font-size-slider" min="10" max="300" value="24" />
-            <button id="save-btn" class="save-btn">Save</button>
-            <button id="download-btn" class="download-btn">Download</button>
-        </div>
-        <div class="divider"></div>
-        <div class="thank-you">
-            <a href="https://parti.com/creator/discord/f7ash/0" target="_blank">
-                <img src="images/f7ash.png" alt="f7ash" class="creator-image">
-                <p>f7ash</p>
-            </a>
-            <p>Tip the creator to keep this project free!</p>
-            <button id="donate-btn" class="donate-btn">Donate</button>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+document.addEventListener("DOMContentLoaded", () => {
+    const fontSelector = document.getElementById("font-selector");
+    const fontUpload = document.getElementById("font-upload");
+    const editableText = document.getElementById("editable-text");
+    const downloadBtn = document.getElementById("download-btn");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const templateImage = document.getElementById("template-image");
+    const fontSizeSlider = document.getElementById("font-size-slider");
+
+    const templates = ["images/template1.png", "images/template2.png", "images/template3.png", "images/template4.png", "images/template5.png"];
+    let currentTemplateIndex = 0;
+
+    const fonts = [
+        { name: "Alfarn 2", family: "alfarn-2" },
+        { name: "Cheee", family: "cheee" },
+        { name: "Flegrei", family: "flegrei" },
+        { name: "Modak", family: "modak" },
+        { name: "Modern Love", family: "modern-love" }
+    ];
+
+    // Load the initial template
+    const loadTemplate = (index) => {
+        templateImage.src = templates[index];
+    };
+    loadTemplate(currentTemplateIndex);
+
+    // Update text style in real-time
+    const updateTextStyle = () => {
+        editableText.style.fontFamily = fontSelector.value;
+        editableText.style.fontSize = fontSizeSlider.value + 'px';
+    };
+
+    // Font upload functionality
+    fontUpload.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const newFont = new FontFace(file.name, event.target.result);
+                newFont.load().then(() => {
+                    document.fonts.add(newFont);
+                    const option = document.createElement("option");
+                    option.value = newFont.family;
+                    option.textContent = newFont.family;
+                    fontSelector.appendChild(option);
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Populate font dropdown
+    fonts.forEach((font) => {
+        const option = document.createElement("option");
+        option.value = font.family;
+        option.textContent = font.name;
+        fontSelector.appendChild(option);
+    });
+
+    // Font change event
+    fontSelector.addEventListener("change", updateTextStyle);
+
+    // Font size slider
+    fontSizeSlider.addEventListener("input", updateTextStyle);
+
+    // Next/Previous template navigation
+    prevBtn.addEventListener("click", () => {
+        currentTemplateIndex = (currentTemplateIndex === 0) ? templates.length - 1 : currentTemplateIndex - 1;
+        loadTemplate(currentTemplateIndex);
+    });
+
+    nextBtn.addEventListener("click", () => {
+        currentTemplateIndex = (currentTemplateIndex === templates.length - 1) ? 0 : currentTemplateIndex + 1;
+        loadTemplate(currentTemplateIndex);
+    });
+
+    // Download button functionality with transparent background and original quality
+    downloadBtn.addEventListener("click", () => {
+        html2canvas(document.querySelector(".panel"), {
+            backgroundColor: null, // Ensures the background is transparent
+            scale: 2, // Ensures higher quality
+            logging: false // Disables unnecessary logging
+        }).then((canvas) => {
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/png");
+            link.download = "parti_panel.png";
+            link.click();
+        });
+    });
+});

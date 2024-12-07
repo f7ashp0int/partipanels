@@ -108,16 +108,15 @@ h1 {
 }
 
 #font-selector {
-    margin: 10px;
-    padding: 10px;
-    background-color: #1A1A29;
-    color: white;
-    border: 1px solid #2EE2AA;
+    margin-top: 10px;
+    padding: 5px;
+    font-size: 16px;
+    width: 200px;
 }
 
 #font-size-slider {
     margin-top: 10px;
-    width: 80%;
+    width: 100%;
 }
 
 .download-btn {
@@ -179,16 +178,4 @@ h1 {
     width: 100px;
     height: 100px;
     object-fit: cover;
-}
-
-/* Ensure fonts are applied correctly */
-.editable-text {
-    font-family: 'Alfarn 2', sans-serif; /* Default font */
-    font-size: 24px;
-}
-
-/* Adjust font size slider */
-#font-size-slider {
-    width: 80%;
-    margin-top: 10px;
 }

@@ -77,14 +77,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Download button functionality
     downloadBtn.addEventListener("click", () => {
-        // Ensure the panel container is visible and the template is transparent
-        html2canvas(document.querySelector(".panel-container"), {
-            backgroundColor: 'transparent',  // Set transparent background
-            useCORS: true,                   // Enable CORS for external images
-            scale: 2,                        // Increase scale for better quality
+        html2canvas(document.querySelector(".panel"), {
+            backgroundColor: null,  // Keeps the background transparent
+            allowTaint: true,  // Allow images to be tainted
+            useCORS: true,  // Handle cross-origin issues
+            width: 640,  // Maintain original width
+            height: 320,  // Maintain original height
+            scale: 1  // Ensure original quality
         }).then((canvas) => {
             const link = document.createElement("a");
-            link.href = canvas.toDataURL();
+            link.href = canvas.toDataURL("image/png");
             link.download = "parti_panel.png";
             link.click();
         });

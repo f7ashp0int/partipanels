@@ -15,12 +15,6 @@ h1 {
     color: #2EE2AA;
 }
 
-.container {
-    max-width: 800px;
-    width: 100%;
-    text-align: center;
-}
-
 .panel-container {
     display: flex;
     align-items: center;
@@ -29,7 +23,14 @@ h1 {
     width: 640px;
     height: 320px;
     margin: 20px auto;
-    background-color: #1A1A29;
+    overflow: hidden;
+}
+
+.panel {
+    position: relative;
+    width: 640px;
+    height: 320px;
+    background-color: transparent; /* No background color for the panel */
     overflow: hidden;
 }
 
@@ -75,12 +76,6 @@ h1 {
 
 #next-btn {
     right: 10px;
-}
-
-.instructions {
-    color: #2EE2AA;
-    margin-top: 10px;
-    font-size: 16px;
 }
 
 .controls {

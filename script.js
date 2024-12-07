@@ -2,69 +2,96 @@ document.addEventListener("DOMContentLoaded", () => {
     const fontSelector = document.getElementById("font-selector");
     const fontUpload = document.getElementById("font-upload");
     const editableText = document.getElementById("editable-text");
-    const fontSizeSlider = document.getElementById("font-size-slider");
     const downloadBtn = document.getElementById("download-btn");
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
     const templateImage = document.getElementById("template-image");
+    const fontSizeSlider = document.getElementById("font-size-slider");
 
     const templates = ["images/template1.png", "images/template2.png", "images/template3.png", "images/template4.png", "images/template5.png"];
     let currentTemplateIndex = 0;
 
+    const fonts = [
+        { name: "Alfarn 2", family: "alfarn-2" },
+        { name: "Cheee", family: "cheee" },
+        { name: "Flegrei", family: "flegrei" },
+        { name: "Modak", family: "modak" },
+        { name: "Modern Love", family: "modern-love" }
+    ];
+
+    // Load the initial template
     const loadTemplate = (index) => {
         templateImage.src = templates[index];
     };
     loadTemplate(currentTemplateIndex);
 
+    // Update text style in real-time
+    const updateTextStyle = () => {
+        editableText.style.fontFamily = fontSelector.value;
+        editableText.style.fontSize = fontSizeSlider.value + 'px';
+    };
+
+    // Font upload functionality
+    fontUpload.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const newFont = new FontFace(file.name, event.target.result);
+                newFont.load().then(() => {
+                    document.fonts.add(newFont);
+                    const option = document.createElement("option");
+                    option.value = newFont.family;
+                    option.textContent = newFont.family;
+                    fontSelector.appendChild(option);
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Populate font dropdown
+    fonts.forEach((font) => {
+        const option = document.createElement("option");
+        option.value = font.family;
+        option.textContent = font.name;
+        fontSelector.appendChild(option);
+    });
+
+    // Font change event
+    fontSelector.addEventListener("change", updateTextStyle);
+
+    // Font size slider
+    fontSizeSlider.addEventListener("input", updateTextStyle);
+
+    // Next/Previous template navigation
     prevBtn.addEventListener("click", () => {
-        currentTemplateIndex = (currentTemplateIndex - 1 + templates.length) % templates.length;
+        currentTemplateIndex = (currentTemplateIndex === 0) ? templates.length - 1 : currentTemplateIndex - 1;
         loadTemplate(currentTemplateIndex);
     });
 
     nextBtn.addEventListener("click", () => {
-        currentTemplateIndex = (currentTemplateIndex + 1) % templates.length;
+        currentTemplateIndex = (currentTemplateIndex === templates.length - 1) ? 0 : currentTemplateIndex + 1;
         loadTemplate(currentTemplateIndex);
     });
 
-    // Load fonts from fonts folder
-    const fontFiles = ["Alfarn 2", "Cheee", "Flegrei", "Modak", "Modern Love"];
-    fontFiles.forEach((font) => {
-        const option = document.createElement("option");
-        option.value = font;
-        option.textContent = font;
-        fontSelector.appendChild(option);
-    });
-
-    fontUpload.addEventListener("change", (e) => {
-        const fontFile = e.target.files[0];
-        if (fontFile) {
-            const fontName = fontFile.name.split(".")[0];
-            const fontUrl = URL.createObjectURL(fontFile);
-            const newFont = new FontFace(fontName, `url(${fontUrl})`);
-            newFont.load().then((loadedFont) => {
-                document.fonts.add(loadedFont);
-                const option = document.createElement("option");
-                option.value = fontName;
-                option.textContent = fontName;
-                fontSelector.appendChild(option);
-            });
-        }
-    });
-
-    fontSelector.addEventListener("change", (e) => {
-        editableText.style.fontFamily = e.target.value;
-    });
-
-    fontSizeSlider.addEventListener("input", (e) => {
-        editableText.style.fontSize = `${e.target.value}px`;
-    });
-
+    // Download button functionality
     downloadBtn.addEventListener("click", () => {
-        html2canvas(document.querySelector(".panel")).then((canvas) => {
-            const link = document.createElement("a");
-            link.download = "panel.png";
-            link.href = canvas.toDataURL();
-            link.click();
-        });
+        // Make sure images are loaded before generating the canvas
+        const img = new Image();
+        img.src = templateImage.src;
+        img.onload = function() {
+            // Using html2canvas to capture the panel
+            html2canvas(document.querySelector(".panel"), {
+                useCORS: true, // To handle cross-origin images like templates
+                allowTaint: true,
+                scale: 2 // This will help ensure better quality for the canvas
+            }).then((canvas) => {
+                const link = document.createElement("a");
+                link.href = canvas.toDataURL("image/png");
+                link.download = "parti_panel.png";
+                link.click();
+            });
+        };
     });
 });

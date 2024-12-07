@@ -1,7 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #0D0D11;
-    color: #FFFFFF;
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,10 +7,17 @@ body {
     align-items: center;
     flex-direction: column;
     min-height: 100vh;
+    background-color: #0D0D11; /* Retaining the body background */
 }
 
 h1 {
     color: #2EE2AA;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
 }
 
 .panel-container {
@@ -23,14 +28,7 @@ h1 {
     width: 640px;
     height: 320px;
     margin: 20px auto;
-    overflow: hidden;
-}
-
-.panel {
-    position: relative;
-    width: 640px;
-    height: 320px;
-    background-color: transparent; /* No background color for the panel */
+    background-color: transparent; /* Remove background color */
     overflow: hidden;
 }
 
@@ -76,6 +74,12 @@ h1 {
 
 #next-btn {
     right: 10px;
+}
+
+.instructions {
+    color: #2EE2AA;
+    margin-top: 10px;
+    font-size: 16px;
 }
 
 .controls {

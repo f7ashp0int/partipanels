@@ -1,180 +1,93 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #0D0D11; /* Retaining the body background */
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const fontSelector = document.getElementById("font-selector");
+    const fontUpload = document.getElementById("font-upload");
+    const editableText = document.getElementById("editable-text");
+    const downloadBtn = document.getElementById("download-btn");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const templateImage = document.getElementById("template-image");
+    const fontSizeSlider = document.getElementById("font-size-slider");
 
-h1 {
-    color: #2EE2AA;
-}
+    const templates = ["images/template1.png", "images/template2.png", "images/template3.png", "images/template4.png", "images/template5.png"];
+    let currentTemplateIndex = 0;
 
-.container {
-    max-width: 800px;
-    width: 100%;
-    text-align: center;
-}
+    const fonts = [
+        { name: "Alfarn 2", family: "alfarn-2" },
+        { name: "Cheee", family: "cheee" },
+        { name: "Flegrei", family: "flegrei" },
+        { name: "Modak", family: "modak" },
+        { name: "Modern Love", family: "modern-love" }
+    ];
 
-.panel-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 640px;
-    height: 320px;
-    margin: 20px auto;
-    background-color: transparent; /* Remove background color */
-    overflow: hidden;
-}
+    // Load the initial template
+    const loadTemplate = (index) => {
+        templateImage.src = templates[index];
+    };
+    loadTemplate(currentTemplateIndex);
 
-.panel img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    // Update text style in real-time
+    const updateTextStyle = () => {
+        editableText.style.fontFamily = fontSelector.value;
+        editableText.style.fontSize = fontSizeSlider.value + 'px';
+    };
 
-.editable-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    text-align: center;
-    width: 90%;
-    color: white;
-    outline: none;
-    padding: 5px;
-    word-wrap: break-word;
-    max-width: 90%;
-}
+    // Font upload functionality
+    fontUpload.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const newFont = new FontFace(file.name, event.target.result);
+                newFont.load().then(() => {
+                    document.fonts.add(newFont);
+                    const option = document.createElement("option");
+                    option.value = newFont.family;
+                    option.textContent = newFont.family;
+                    fontSelector.appendChild(option);
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
-.nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 10;
-}
+    // Populate font dropdown
+    fonts.forEach((font) => {
+        const option = document.createElement("option");
+        option.value = font.family;
+        option.textContent = font.name;
+        fontSelector.appendChild(option);
+    });
 
-.nav-btn img {
-    width: 40px;
-    height: 40px;
-}
+    // Font change event
+    fontSelector.addEventListener("change", updateTextStyle);
 
-#prev-btn {
-    left: 10px;
-}
+    // Font size slider
+    fontSizeSlider.addEventListener("input", updateTextStyle);
 
-#next-btn {
-    right: 10px;
-}
+    // Next/Previous template navigation
+    prevBtn.addEventListener("click", () => {
+        currentTemplateIndex = (currentTemplateIndex === 0) ? templates.length - 1 : currentTemplateIndex - 1;
+        loadTemplate(currentTemplateIndex);
+    });
 
-.instructions {
-    color: #2EE2AA;
-    margin-top: 10px;
-    font-size: 16px;
-}
+    nextBtn.addEventListener("click", () => {
+        currentTemplateIndex = (currentTemplateIndex === templates.length - 1) ? 0 : currentTemplateIndex + 1;
+        loadTemplate(currentTemplateIndex);
+    });
 
-.controls {
-    margin-top: 20px;
-}
-
-.custom-file-upload {
-    background-color: #28c87d;
-    color: #0D0D11;
-    padding: 10px;
-    border: 2px solid #2EE2AA;
-    border-radius: 5px;
-    cursor: pointer;
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.custom-file-upload:hover {
-    background-color: #2EE2AA;
-    color: #0D0D11;
-}
-
-.custom-file-upload input {
-    display: none;
-}
-
-#font-selector {
-    margin-top: 10px;
-    padding: 5px;
-    font-size: 16px;
-    width: 200px;
-}
-
-#font-size-slider {
-    margin-top: 10px;
-    width: 100%;
-}
-
-.download-btn {
-    background-color: #2EE2AA;
-    color: #0D0D11;
-    padding: 10px 20px;
-    border: 2px solid #42f5a7;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #2EE2AA;
-}
-
-.download-btn:hover {
-    background-color: #42f5a7;
-    box-shadow: 0 0 15px #42f5a7;
-}
-
-.divider {
-    width: 100%;
-    height: 1px;
-    background-color: #42f5a7;
-    margin: 30px 0;
-    opacity: 0.5;
-}
-
-.thank-you {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.thank-you img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-bottom: 5px;
-}
-
-.thank-you p {
-    margin: 5px 0;
-    color: #FFFFFF;
-}
-
-.donate-btn {
-    background-color: #28c87d;
-    color: #0D0D11;
-    padding: 10px 20px;
-    border: 2px solid #2EE2AA;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.donate-btn:hover {
-    background-color: #2EE2AA;
-    color: #0D0D11;
-}
-
-.creator-image {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-}
+    // Download button functionality
+    downloadBtn.addEventListener("click", () => {
+        html2canvas(document.querySelector(".panel"), {
+            backgroundColor: null,  // No background
+            width: 640,  // Retaining 640px width (original resolution)
+            height: 320, // Retaining 320px height (original resolution)
+            allowTaint: true,  // Allow images to be tainted
+            useCORS: true,  // Handle cross-origin issues
+        }).then((canvas) => {
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/png");
+            link.download = "parti_panel.png";  // Keep original quality
+            link.click();
+        });
+    });
+});

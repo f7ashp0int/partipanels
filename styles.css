@@ -77,17 +77,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Download button functionality
     downloadBtn.addEventListener("click", () => {
-        html2canvas(document.querySelector(".panel"), {
-            backgroundColor: null,  // No background
-            width: 640,  // Retaining 640px width (original resolution)
-            height: 320, // Retaining 320px height (original resolution)
-            allowTaint: true,  // Allow images to be tainted
-            useCORS: true,  // Handle cross-origin issues
+        html2canvas(document.getElementById("panel"), {
+            backgroundColor: null, // Transparent background
+            logging: true, // Enable logging for debugging
+            scale: 2, // Higher scale for better quality
+            useCORS: true, // Enable CORS support for images
         }).then((canvas) => {
             const link = document.createElement("a");
-            link.href = canvas.toDataURL("image/png");
-            link.download = "parti_panel.png";  // Keep original quality
+            link.href = canvas.toDataURL();
+            link.download = "parti_panel.png";
             link.click();
+        }).catch(error => {
+            console.error("Error during html2canvas:", error);
         });
     });
 });

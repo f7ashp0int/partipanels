@@ -5,46 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parti Panels by f7ash</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Adobe Fonts Link -->
-    <link rel="stylesheet" href="https://use.typekit.net/nls3wsu.css">
-    <!-- HTML2Canvas -->
+    <!-- html2canvas Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Parti Panels by f7ash</h1>
-        <div class="panel-container">
-            <button id="prev-btn" class="nav-btn">
-                <img src="icons/left-arrow.png" alt="Previous">
-            </button>
-            <div class="panel" id="panel">
-                <img id="template-image" src="" alt="Panel Design">
-                <div class="editable-text" contenteditable="true" id="editable-text">Edit Me!</div>
-            </div>
-            <button id="next-btn" class="nav-btn">
-                <img src="icons/right-arrow.png" alt="Next">
-            </button>
+    <div class="panel-container">
+        <button id="prev-btn" class="nav-btn">
+            <img src="icons/left-arrow.png" alt="Previous">
+        </button>
+        <div class="panel" id="panel">
+            <img id="template-image" src="" alt="Panel Design">
+            <div class="editable-text" contenteditable="true" id="editable-text">Edit Me!</div>
         </div>
-        <p class="instructions">Use right and left arrows to preview different background templates.</p>
-        <div class="controls">
-            <label class="custom-file-upload">
-                <input type="file" id="font-upload" accept=".ttf,.otf" />
-                Upload Custom Font
-            </label>
-            <select id="font-selector"></select>
-            <label>Font Size:</label>
-            <input type="range" id="font-size-slider" min="10" max="300" value="24" />
-            <button id="download-btn" class="download-btn">Download</button>
-        </div>
-        <div class="divider"></div>
-        <div class="thank-you">
-            <a href="https://parti.com/creator/discord/f7ash/0" target="_blank">
-                <img src="images/f7ash.png" alt="f7ash" class="creator-image">
-                <p>f7ash</p>
-            </a>
-            <p>Tip the creator to keep this project free!</p>
-            <button id="donate-btn" class="donate-btn">Donate</button>
-        </div>
+        <button id="next-btn" class="nav-btn">
+            <img src="icons/right-arrow.png" alt="Next">
+        </button>
+    </div>
+    <div class="controls">
+        <label class="custom-file-upload">
+            <input type="file" id="font-upload" accept=".ttf,.otf" />
+            Upload Custom Font
+        </label>
+        <select id="font-selector"></select>
+        <label>Font Size:</label>
+        <input type="range" id="font-size-slider" min="10" max="300" value="24" />
+        <button id="download-btn" class="download-btn">Download</button>
+    </div>
+    <div class="divider"></div>
+    <div class="thank-you">
+        <a href="https://parti.com/creator/discord/f7ash/0" target="_blank">
+            <img src="images/f7ash.png" alt="f7ash" class="creator-image">
+            <p>f7ash</p>
+        </a>
+        <p>Tip the creator to keep this project free!</p>
+        <button id="donate-btn" class="donate-btn">Donate</button>
     </div>
     <script src="script.js"></script>
 </body>

@@ -1,93 +1,99 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const fontSelector = document.getElementById("font-selector");
-    const fontUpload = document.getElementById("font-upload");
-    const editableText = document.getElementById("editable-text");
-    const downloadBtn = document.getElementById("download-btn");
-    const prevBtn = document.getElementById("prev-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const templateImage = document.getElementById("template-image");
-    const fontSizeSlider = document.getElementById("font-size-slider");
+document.addEventListener('DOMContentLoaded', () => {
+  const panelContainer = document.getElementById('design-panel');
+  const editableText = document.getElementById('editable-text');
+  const fontSelector = document.getElementById('font-selector');
+  const fontSizeSlider = document.getElementById('font-size-slider');
+  const uploadFontButton = document.getElementById('upload-font-button');
+  const fontUploadInput = document.getElementById('font-upload');
+  const downloadButton = document.getElementById('download-panel');
+  const prevTemplateButton = document.getElementById('prev-template');
+  const nextTemplateButton = document.getElementById('next-template');
 
-    const templates = ["images/template1.png", "images/template2.png", "images/template3.png", "images/template4.png", "images/template5.png"];
-    let currentTemplateIndex = 0;
+  // Template management
+  const templates = [
+    'images/template1.png',
+    'images/template2.png'
+	'images/template3.png'
+	'images/template4.png'
+    // Add more template paths as needed
+  ];
+  let currentTemplateIndex = 0;
 
-    const fonts = [
-        { name: "Alfarn 2", family: "alfarn-2" },
-        { name: "Cheee", family: "cheee" },
-        { name: "Flegrei", family: "flegrei" },
-        { name: "Modak", family: "modak" },
-        { name: "Modern Love", family: "modern-love" }
-    ];
+  function updateTemplate(direction) {
+    currentTemplateIndex = (currentTemplateIndex + direction + templates.length) % templates.length;
+    panelContainer.style.backgroundImage = `url(${templates[currentTemplateIndex]})`;
+  }
 
-    // Load the initial template
-    const loadTemplate = (index) => {
-        templateImage.src = templates[index];
-    };
-    loadTemplate(currentTemplateIndex);
+  prevTemplateButton.addEventListener('click', () => updateTemplate(-1));
+  nextTemplateButton.addEventListener('click', () => updateTemplate(1));
 
-    // Update text style in real-time
-    const updateTextStyle = () => {
-        editableText.style.fontFamily = fontSelector.value;
-        editableText.style.fontSize = fontSizeSlider.value + 'px';
-    };
+  // Initial template load
+  panelContainer.style.backgroundImage = `url(${templates[currentTemplateIndex]})`;
 
-    // Font upload functionality
-    fontUpload.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const newFont = new FontFace(file.name, event.target.result);
-                newFont.load().then(() => {
-                    document.fonts.add(newFont);
-                    const option = document.createElement("option");
-                    option.value = newFont.family;
-                    option.textContent = newFont.family;
-                    fontSelector.appendChild(option);
-                });
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+  // Text editing
+  editableText.addEventListener('input', () => {
+    const fontSize = fontSizeSlider.value;
+    editableText.style.fontSize = `${fontSize}px`;
+  });
 
-    // Populate font dropdown
-    fonts.forEach((font) => {
-        const option = document.createElement("option");
-        option.value = font.family;
-        option.textContent = font.name;
-        fontSelector.appendChild(option);
-    });
+  // Font selection
+  fontSelector.addEventListener('change', (e) => {
+    const selectedFont = e.target.value;
+    editableText.style.fontFamily = `"${selectedFont}", sans-serif`;
+  });
 
-    // Font change event
-    fontSelector.addEventListener("change", updateTextStyle);
+  // Font size slider
+  fontSizeSlider.addEventListener('input', (e) => {
+    const fontSize = e.target.value;
+    editableText.style.fontSize = `${fontSize}px`;
+  });
 
-    // Font size slider
-    fontSizeSlider.addEventListener("input", updateTextStyle);
+  // Custom font upload
+  uploadFontButton.addEventListener('click', () => {
+    fontUploadInput.click();
+  });
 
-    // Next/Previous template navigation
-    prevBtn.addEventListener("click", () => {
-        currentTemplateIndex = (currentTemplateIndex === 0) ? templates.length - 1 : currentTemplateIndex - 1;
-        loadTemplate(currentTemplateIndex);
-    });
-
-    nextBtn.addEventListener("click", () => {
-        currentTemplateIndex = (currentTemplateIndex === templates.length - 1) ? 0 : currentTemplateIndex + 1;
-        loadTemplate(currentTemplateIndex);
-    });
-
-    // Download button functionality
-    downloadBtn.addEventListener("click", () => {
-        html2canvas(document.querySelector(".panel"), {
-            backgroundColor: null,  // No background
-            width: 640,  // Retaining 640px width (original resolution)
-            height: 320, // Retaining 320px height (original resolution)
-            allowTaint: true,  // Allow images to be tainted
-            useCORS: true,  // Handle cross-origin issues
-        }).then((canvas) => {
-            const link = document.createElement("a");
-            link.href = canvas.toDataURL("image/png");
-            link.download = "parti_panel.png";  // Keep original quality
-            link.click();
+  fontUploadInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const fontName = file.name.replace(/\.[^/.]+$/, "");
+        const fontFace = new FontFace(fontName, `url(${event.target.result})`);
+        
+        fontFace.load().then((loadedFace) => {
+          document.fonts.add(loadedFace);
+          
+          const customFontGroup = document.getElementById('custom-fonts-group');
+          const newOption = document.createElement('option');
+          newOption.value = fontName;
+          newOption.textContent = fontName;
+          customFontGroup.appendChild(newOption);
+          
+          // Optionally, set the newly uploaded font as selected
+          fontSelector.value = fontName;
+          editableText.style.fontFamily = `"${fontName}", sans-serif`;
+        }).catch(error => {
+          console.error('Font loading failed:', error);
+          alert('Failed to upload font. Please ensure it is a valid font file.');
         });
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Download panel as image
+  downloadButton.addEventListener('click', () => {
+    html2canvas(panelContainer).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'design-panel.png';
+      link.href = canvas.toDataURL();
+      link.click();
     });
+  });
+
+  // Add html2canvas library dynamically for download functionality
+  const script = document.createElement('script');
+  script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+  document.body.appendChild(script);
 });

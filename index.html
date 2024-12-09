@@ -1,50 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parti Panels by f7ash</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Adobe Fonts Link -->
-    <link rel="stylesheet" href="https://use.typekit.net/nls3wsu.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parti Panels by f7ash</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://use.typekit.net/nls3wsu.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Parti Panels by f7ash</h1>
-        <div class="panel-container">
-            <button id="prev-btn" class="nav-btn">
-                <img src="icons/left-arrow.png" alt="Previous">
-            </button>
-            <div class="panel" id="panel">
-                <img id="template-image" src="" alt="Panel Design">
-                <div class="editable-text" contenteditable="true" id="editable-text">Edit Me!</div>
+  <div class="app-container">
+    <header>
+      <h1>Parti Panels by f7ash</h1>
+    </header>
+
+    <main id="main-panel">
+      <div class="panel-preview-section">
+        <div class="panel-navigation">
+          <button id="prev-template" class="nav-button">
+            <img src="icons/left-arrow.png" alt="Previous Template">
+          </button>
+          
+          <div id="panel-container">
+            <div id="design-panel">
+              <div id="editable-text" contenteditable="true">Edit Me!</div>
             </div>
-            <button id="next-btn" class="nav-btn">
-                <img src="icons/right-arrow.png" alt="Next">
-            </button>
+          </div>
+          
+          <button id="next-template" class="nav-button">
+            <img src="icons/right-arrow.png" alt="Next Template">
+          </button>
         </div>
-        <p class="instructions">Use right and left arrows to preview different background templates.</p>
-        <div class="controls">
-            <label class="custom-file-upload">
-                <input type="file" id="font-upload" accept=".ttf,.otf" />
-                Upload Custom Font
-            </label>
-            <select id="font-selector"></select>
-            <label>Font Size:</label>
-            <input type="range" id="font-size-slider" min="10" max="300" value="24" />
-            <button id="download-btn" class="download-btn">Download</button>
+
+        <div id="instructions">
+          Use right and left arrows to preview different background templates.
         </div>
-        <div class="divider"></div>
-        <div class="thank-you">
-            <a href="https://parti.com/creator/discord/f7ash/0" target="_blank">
-                <img src="images/f7ash.png" alt="f7ash" class="f7ash">
-                <p>f7ash</p>
+      </div>
+
+      <div class="font-controls">
+        <select id="font-selector">
+          <optgroup label="Default Fonts">
+            <option value="Alfarn 2">Alfarn 2</option>
+            <option value="Cheee">Cheee</option>
+            <option value="Flegrei">Flegrei</option>
+            <option value="Modak">Modak</option>
+            <option value="Modern Love">Modern Love</option>
+          </optgroup>
+          <optgroup label="Custom Fonts" id="custom-fonts-group">
+            <!-- Dynamically populated custom fonts will go here -->
+          </optgroup>
+        </select>
+
+        <input type="range" id="font-size-slider" min="10" max="230" value="50">
+        
+        <input type="file" id="font-upload" accept=".ttf,.otf" style="display:none;">
+        <button id="upload-font-button">Upload Custom Font</button>
+        
+        <button id="download-panel">Download Panel</button>
+      </div>
+
+      <section class="creator-section">
+        <div class="creator-links">
+          <div class="creator-profile">
+            <a href="https://parti.com/creator/discord/f7ash/0">
+              <img 
+                src="images/f7ash.png" 
+                alt="f7ash" 
+                class="creator-image"
+              >
             </a>
-            <p>Tip the creator to keep this project free!</p>
-            <button id="donate-btn" class="donate-btn">Donate</button>
+            <p class="support-text">
+              Help keep this project running. Your support matters.
+            </p>
+          </div>
+          <div class="donate-section">
+            <a href="https://streamelements.com/f7ashp0int/tip" class="donate-button">
+              Donate to Support
+            </a>
+          </div>
         </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="script.js"></script>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

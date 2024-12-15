@@ -308,83 +308,92 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-    <script>
-        const textOverlay = document.getElementById("text-overlay");
-        const templatePreview = document.getElementById("template-preview");
-        const leftArrow = document.getElementById("left-arrow");
-        const rightArrow = document.getElementById("right-arrow");
-        const fontSelector = document.getElementById("font-selector");
-        const fontSizeSlider = document.getElementById("font-size-slider");
-        const downloadButton = document.getElementById("download-button");
-        const uploadFontButton = document.getElementById("upload-font-button");
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+    const textOverlay = document.getElementById("text-overlay");
+    const templatePreview = document.getElementById("template-preview");
+    const leftArrow = document.getElementById("left-arrow");
+    const rightArrow = document.getElementById("right-arrow");
+    const fontSelector = document.getElementById("font-selector");
+    const fontSizeSlider = document.getElementById("font-size-slider");
+    const downloadButton = document.getElementById("download-button");
+    const uploadFontButton = document.getElementById("upload-font-button");
 
-        const templates = [
-            "images/template1.png",
-            "images/template2.png",
-            "images/template3.png",
-            "images/template4.png",
-            "images/template5.png",
-        ];
-        let currentTemplateIndex = 0;
+    const templates = [
+        "images/template1.png",
+        "images/template2.png",
+        "images/template3.png",
+        "images/template4.png",
+        "images/template5.png",
+    ];
+    let currentTemplateIndex = 0;
 
-        window.onload = () => {
-            textOverlay.style.fontFamily = "Alfarn";
-            templatePreview.src = templates[currentTemplateIndex];
-        };
+    window.onload = () => {
+        textOverlay.style.fontFamily = "Alfarn";
+        templatePreview.src = templates[currentTemplateIndex];
+    };
 
-        leftArrow.addEventListener("click", () => {
-            currentTemplateIndex = (currentTemplateIndex - 1 + templates.length) % templates.length;
-            templatePreview.src = templates[currentTemplateIndex];
+    leftArrow.addEventListener("click", () => {
+        currentTemplateIndex = (currentTemplateIndex - 1 + templates.length) % templates.length;
+        templatePreview.src = templates[currentTemplateIndex];
+    });
+
+    rightArrow.addEventListener("click", () => {
+        currentTemplateIndex = (currentTemplateIndex + 1) % templates.length;
+        templatePreview.src = templates[currentTemplateIndex];
+    });
+
+    fontSelector.addEventListener("change", (e) => {
+        textOverlay.style.fontFamily = e.target.value;
+    });
+
+    fontSizeSlider.addEventListener("input", (e) => {
+        const fontSize = e.target.value + "px";
+        textOverlay.style.fontSize = fontSize;
+    });
+
+    downloadButton.addEventListener("click", () => {
+        const container = document.querySelector(".preview-container");
+        html2canvas(container, {
+            useCORS: true,
+            logging: false,
+            scale: 2,
+            backgroundColor: null
+        }).then(canvas => {
+            const link = document.createElement("a");
+            link.download = "parti-panel.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        }).catch(err => {
+            console.error("Error generating image:", err);
+            alert("Failed to download image. Please try again.");
         });
+    });
 
-        rightArrow.addEventListener("click", () => {
-            currentTemplateIndex = (currentTemplateIndex + 1) % templates.length;
-            templatePreview.src = templates[currentTemplateIndex];
+    uploadFontButton.addEventListener("click", () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".ttf,.otf,.woff,.woff2";
+        input.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const fontFace = new FontFace(file.name, reader.result);
+                    fontFace.load().then(() => {
+                        document.fonts.add(fontFace);
+                        const option = document.createElement("option");
+                        option.value = file.name;
+                        option.textContent = file.name;
+                        fontSelector.appendChild(option);
+                        textOverlay.style.fontFamily = file.name;
+                    });
+                };
+                reader.readAsArrayBuffer(file);
+            }
         });
-
-        fontSelector.addEventListener("change", (e) => {
-            textOverlay.style.fontFamily = e.target.value;
-        });
-
-        fontSizeSlider.addEventListener("input", (e) => {
-            const fontSize = e.target.value + "px";
-            textOverlay.style.fontSize = fontSize;
-        });
-
-        downloadButton.addEventListener("click", () => {
-            const container = document.querySelector(".main-container");
-            html2canvas(container, {backgroundColor: null}).then(canvas => {
-                const link = document.createElement("a");
-                link.download = "panel.png";
-                link.href = canvas.toDataURL("image/png");
-                link.click();
-            });
-        });
-
-        uploadFontButton.addEventListener("click", () => {
-            const input = document.createElement("input");
-            input.type = "file";
-            input.accept = ".ttf,.otf,.woff,.woff2";
-            input.addEventListener("change", (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        const fontFace = new FontFace(file.name, reader.result);
-                        fontFace.load().then(() => {
-                            document.fonts.add(fontFace);
-                            const option = document.createElement("option");
-                            option.value = file.name;
-                            option.textContent = file.name;
-                            fontSelector.appendChild(option);
-                        });
-                    };
-                    reader.readAsArrayBuffer(file);
-                }
-            });
-            input.click();
-        });
-    </script>
+        input.click();
+    });
+</script>
 </body>
 </html>

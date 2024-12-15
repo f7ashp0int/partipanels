@@ -1,88 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parti Panels by f7ash</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://use.typekit.net/nls3wsu.css">
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parti-Panels</title>
+    <link rel="stylesheet" href="https://use.typekit.net/nls3wsu.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0D0D11;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: none;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .header-subhead {
+            font-size: 1rem;
+            color: #2EE2AA;
+        }
+
+        .header-subhead .white {
+            color: #FFFFFF;
+        }
+
+        .header-subhead a {
+            text-decoration: none;
+            color: #2EE2AA;
+        }
+
+        .main-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            position: relative;
+            max-width: 90%;
+        }
+
+        .preview-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            height: 320px;
+            background: transparent;
+            margin-bottom: 20px;
+        }
+
+        #template-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        #text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            color: #FFFFFF;
+            text-align: center;
+            width: 90%;
+            outline: none;
+            z-index: 1;
+        }
+
+        .arrow-button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .arrow-button img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px auto;
+        }
+
+        label {
+            color: #FFFFFF;
+        }
+
+        #font-selector, #font-size-slider {
+            background: #1A1A29;
+            color: #FFFFFF;
+            border: 1px solid #2EE2AA;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        #upload-font-button {
+            padding: 5px 10px;
+            background: #2EE2AA;
+            color: #1A1A29;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #download-button {
+            padding: 10px 20px;
+            background: #2EE2AA;
+            color: #1A1A29;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #2EE2AA;
+            cursor: pointer;
+            margin: 20px auto;
+        }
+
+        .instructions {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+
+        .thank-section {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        .divider {
+            width: 100%;
+            border-top: 2px solid #16161F;
+            margin: 20px 0;
+        }
+
+        .thank-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .thank-content img {
+            align-items: center;
+            width: 30px;
+            height: auto;
+        }
+
+        .creator-link {
+            font-size: 1rem;
+            color: #2EE2AA;
+            text-decoration: none;
+        }
+
+        .support-section {
+            text-align: center;
+        }
+
+        .support-text {
+            font-size: 0.8rem;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+
+        .donate-button {
+            padding: 10px 20px;
+            background: #2EE2AA;
+            color: #1A1A29;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .footer-icon {
+            width: 30px;
+            height: auto;
+            margin-left: 10px;
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .footer-text {
+            font-size: 1rem;
+        }
+
+        .footer-right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.5rem;
+            }
+
+            .header-subhead {
+                font-size: 0.9rem;
+            }
+
+            #text-overlay {
+                font-size: 24px;
+            }
+
+            .arrow-button img {
+                width: 25px;
+                height: 25px;
+            }
+
+            #font-size-slider {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="app-container">
-    <header>
-      <h1>Parti Panels by f7ash</h1>
+    <header class="header">
+        <img src="images/particon.png" alt="Particon" class="header-icon">
+        <div>
+            <h1 class="header-title">Parti-Panels</h1>
+            <span class="header-subhead"><span class="white">by</span> <a href="https://parti.com/creator/discord/f7ash/0" class="creator-link">f7ash</a></span>
+        </div>
     </header>
 
-    <main id="main-panel">
-      <div class="panel-preview-section">
-        <div class="panel-navigation">
-          <button id="prev-template" class="nav-button">
-            <img src="icons/left-arrow.png" alt="Previous Template">
-          </button>
-          
-          <div id="panel-container">
-            <div id="design-panel">
-              <div id="editable-text" contenteditable="true">Edit Me!</div>
-            </div>
-          </div>
-          
-          <button id="next-template" class="nav-button">
-            <img src="icons/right-arrow.png" alt="Next Template">
-          </button>
+    <div class="main-container">
+        <button id="left-arrow" class="arrow-button">
+            <img src="icons/left-arrow.png" alt="Left Arrow">
+        </button>
+        <div class="preview-container">
+            <img id="template-preview" src="images/template1.png" alt="Template Preview">
+            <div id="text-overlay" contenteditable="true">Edit Me!</div>
         </div>
+        <button id="right-arrow" class="arrow-button">
+            <img src="icons/right-arrow.png" alt="Right Arrow">
+        </button>
+    </div>
 
-        <div id="instructions">
-          Use right and left arrows to preview different background templates.
-        </div>
-      </div>
+    <p class="instructions">Use right and left arrows to preview different background templates.</p>
 
-      <div class="font-controls">
+    <div class="controls">
+        <label for="font-selector">Font:</label>
         <select id="font-selector">
-          <optgroup label="Default Fonts">
-            <option value="Alfarn 2">Alfarn 2</option>
+            <option value="Alfarn" selected>Alfarn</option>
             <option value="Cheee">Cheee</option>
             <option value="Flegrei">Flegrei</option>
             <option value="Modak">Modak</option>
             <option value="Modern Love">Modern Love</option>
-          </optgroup>
-          <optgroup label="Custom Fonts" id="custom-fonts-group">
-            <!-- Dynamically populated custom fonts will go here -->
-          </optgroup>
         </select>
 
-        <input type="range" id="font-size-slider" min="10" max="230" value="50">
-        
-        <input type="file" id="font-upload" accept=".ttf,.otf" style="display:none;">
+        <label for="font-size-slider">Font Size:</label>
+        <input id="font-size-slider" type="range" min="10" max="260" value="30">
+
         <button id="upload-font-button">Upload Custom Font</button>
-        
-        <button id="download-panel">Download Panel</button>
-      </div>
+    </div>
 
-      <section class="creator-section">
-        <div class="creator-links">
-          <div class="creator-profile">
-            <a href="https://parti.com/creator/discord/f7ash/0">
-              <img 
-                src="images/f7ash.png" 
-                alt="f7ash" 
-                class="creator-image"
-              >
-            </a>
-            <p class="support-text">
-              Help keep this project running. Your support matters.
-            </p>
-          </div>
-          <div class="donate-section">
-            <a href="https://streamelements.com/f7ashp0int/tip" class="donate-button">
-              Donate to Support
-            </a>
-          </div>
+    <button id="download-button">Download</button>
+
+    <footer class="thank-section">
+        <div class="thank-content">
+            <img src="images/f7ash.png" alt="f7ash">
+            <a href="https://parti.com/creator/discord/f7ash/0" class="creator-link">f7ash</a>
         </div>
-      </section>
-    </main>
-  </div>
+        <div class="support-section">
+            <p class="support-text">Share and Support</p>
+        </div>
+    </footer>
 
-  <script src="script.js"></script>
+    <div class="divider"></div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <a href="https://streamelements.com/f7ashp0int/tip" class="donate-button">Donate to Support</a>
+        </div>
+        <div class="footer-right">
+            <img src="images/particon.png" alt="Particon" class="footer-icon">
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script>
+        const textOverlay = document.getElementById("text-overlay");
+        const templatePreview = document.getElementById("template-preview");
+        const leftArrow = document.getElementById("left-arrow");
+        const rightArrow = document.getElementById("right-arrow");
+        const fontSelector = document.getElementById("font-selector");
+        const fontSizeSlider = document.getElementById("font-size-slider");
+        const downloadButton = document.getElementById("download-button");
+        const uploadFontButton = document.getElementById("upload-font-button");
+
+        const templates = [
+            "images/template1.png",
+            "images/template2.png",
+            "images/template3.png",
+            "images/template4.png",
+            "images/template5.png",
+        ];
+        let currentTemplateIndex = 0;
+
+        window.onload = () => {
+            textOverlay.style.fontFamily = "Alfarn";
+            templatePreview.src = templates[currentTemplateIndex];
+        };
+
+        leftArrow.addEventListener("click", () => {
+            currentTemplateIndex = (currentTemplateIndex - 1 + templates.length) % templates.length;
+            templatePreview.src = templates[currentTemplateIndex];
+        });
+
+        rightArrow.addEventListener("click", () => {
+            currentTemplateIndex = (currentTemplateIndex + 1) % templates.length;
+            templatePreview.src = templates[currentTemplateIndex];
+        });
+
+        fontSelector.addEventListener("change", (e) => {
+            textOverlay.style.fontFamily = e.target.value;
+        });
+
+        fontSizeSlider.addEventListener("input", (e) => {
+            const fontSize = e.target.value + "px";
+            textOverlay.style.fontSize = fontSize;
+        });
+
+        downloadButton.addEventListener("click", () => {
+            const container = document.querySelector(".main-container");
+            html2canvas(container, {backgroundColor: null}).then(canvas => {
+                const link = document.createElement("a");
+                link.download = "panel.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        });
+
+        uploadFontButton.addEventListener("click", () => {
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = ".ttf,.otf,.woff,.woff2";
+            input.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const fontFace = new FontFace(file.name, reader.result);
+                        fontFace.load().then(() => {
+                            document.fonts.add(fontFace);
+                            const option = document.createElement("option");
+                            option.value = file.name;
+                            option.textContent = file.name;
+                            fontSelector.appendChild(option);
+                        });
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+            });
+            input.click();
+        });
+    </script>
 </body>
 </html>
